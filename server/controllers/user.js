@@ -1,13 +1,14 @@
 const { isMatch, createServices } = require("../helpers/common");
 const User = require("../models/user");
 const jwt=require('jsonwebtoken');
-const sgMail = require('@sendgrid/mail');
+const nodemailer=require('nodemailer');
 const bcrypt = require('bcrypt');
 const OTP = require("../models/otp");
+const SendEmailUtility = require("../helpers/sendOTP");
 
 
-// comfigure sendgrid
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+
 
 exports.register=async(req,res)=>{
     try{
@@ -157,24 +158,66 @@ exports.sendOTP=async (req,res)=>{
     if(isMatchEmail.length>0){
         const newOTP=await OTP.findOneAndUpdate(emailName,{OTP:OTPcode},{new:true});
         // send email
-        const msg = {
-            to:email,
-            from:'sohanurl653@gmail.com',
-            subject: 'Your OTP',
-            text: `Your OTP is: ${newOTP.OTP}`,
-            html: `<p>Your OTP is: ${newOTP.OTP}</p>`,
-        };
-       sgMail
-            .send(msg)
-            .then(() => {
-                res.json(newOTP)
-            }, error => {
-                console.error(error);
-
-                 if (error.response) {
-                console.error(error.response.body)
-                }
-                    });
+        let SendEmail = await SendEmailUtility(email,"Your PIN Code is= "+newOTP.OTP,"Task Manager PIN Verification")
+            res.status(200).json({status: "success", OTP:newOTP.OTP,email:newOTP.email})
+           
+     
     }
    
+}
+
+// change status
+exports.changeStatus=async(req,res)=>{
+  const reqBody=req.body;
+  
+    
+    try {
+        const isMatchCode=await isMatch(OTP,reqBody);
+        console.log(isMatchCode)
+        if(isMatchCode.length>0){
+            const newStatus=await OTP.findOneAndUpdate(reqBody,{status:1},{new:true})
+            res.json(newStatus);
+
+        }else{
+            res.json({error:"OTP doesnot matched"})
+        }
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+
+exports.makePassword=async(req,res)=>{
+    const {newPassword,confirmNewPassword} = req.body
+    const id=req.id;
+   
+    try {
+        if(newPassword !== confirmNewPassword){
+            res.json({
+                error:"password not matched"
+            })
+        }else{
+            const salt= bcrypt.genSaltSync(8)
+            const hashPassword=bcrypt.hashSync(newPassword,salt)
+                const user=  await User.findOneAndUpdate({_id:id},{password:hashPassword},{new:true});
+                console.log(user)
+                if(user.email){
+                    console.log(user.email)
+                 const findOTPemail=await OTP.find({email:user.email})
+                 console.log(findOTPemail)
+                if(findOTPemail.length>0){
+                   const data= await OTP.findOneAndUpdate({email:user.email},{status:0,OTP:""},{new:true});
+                    res.json({
+                        data:data
+                    })
+                }
+      }
+
+       
+        }
+    } catch (error) {
+        res.json({
+            error:error.message
+        })
+    }    
 }

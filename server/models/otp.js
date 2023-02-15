@@ -15,14 +15,7 @@ const OTPSchema= mongoose.Schema({
 },{ timestamps:true,
     versionKey:false });
     //  after 3 minutes status will be 0
- OTPSchema.post('save', function (doc) {
-        setTimeout(() => {
-            if (doc.status === 1) {
-                doc.status = 0;
-                doc.save();
-            }
-        }, 3 * 60 * 1000);
-});
+
 
 const OTP=mongoose.model('OTP',OTPSchema);
 

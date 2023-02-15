@@ -62,7 +62,7 @@ const SignUp = () => {
    <input onChange={e=>setConfirmPassword(e.target.value)}  className='border-2 my-4 p-2 border-blue-600 rounded-md w-3/4 outline-none focus:border-green-700' placeholder='Confirm Password' required type="password" name="" id="confirmPAssword" />
    <input onClick={handleSubmit} className='bg-blue-600  hover:bg-blue-800 my-4 focus:bg-blue-700 font-semibold p-2 rounded-md w-3/4 cursor-pointer' type="submit" value="submit" />
    </form>
-   <p className='text-center py-2'>Already signUp please  <Link className='text-blue-600' to='/login'>Login</Link></p>
+   <p className='text-center py-2'>Already signUp please  <Link to='/' className='text-blue-600' >Login</Link></p>
    <div className='flex justify-center items-center'>
        <div className='w-28 border-2 border-b-slate-700'></div>
        <p className='p-2'>or</p>

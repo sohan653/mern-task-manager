@@ -54,8 +54,8 @@ const Login = () => {
    <input onChange={(e)=>setPassword(e.target.value)} autocomplete="off"  className='border-2 my-4 p-2 border-blue-600 rounded-md w-3/4 outline-none focus:border-green-700' placeholder='Enter Your Password' type="password" required name="" id="" />
    <input onClick={handleSubmit} className='bg-blue-600  hover:bg-blue-800 my-4 focus:bg-yellow-700 font-semibold p-2 rounded-md w-3/4 cursor-pointer' type="submit" value="Log in" />
    </div>
-   <button  className='text-blue-600'>forgot password</button>
-   <p className='text-center py-2'>Not Sign Up please <Link className='text-blue-600' to='/signup'>sign up</Link></p>
+   <Link to='/create-otp'  className='text-blue-600 text-center'>forgot password</Link>
+   <p className='text-center py-2'>Not Sign Up please <Link to='/signup' className='text-blue-600' to='/signup'>sign up</Link></p>
    <div className='flex justify-center items-center'>
        <div className='w-28 border-2 border-b-slate-700'></div>
        <p className='p-2'>*</p>

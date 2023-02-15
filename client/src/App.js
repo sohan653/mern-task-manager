@@ -5,6 +5,9 @@ import './App.css';
 import Login from './Components/Login';
 import SignUp from './Components/SignUp';
 import Dashboard from './Pages/Dashboard/Dashboard';
+import CreateOtp from './Pages/ForgotPassword/CreateOtp';
+import MakePassword from './Pages/ForgotPassword/MakePassword';
+import MatchOTP from './Pages/ForgotPassword/MatchOTP';
 import CancelledTask from './Pages/MyTask/CancelledTask';
 import CreateTask from './Pages/MyTask/CreateTask';
 import FinishedTask from './Pages/MyTask/FinishedTask';
@@ -53,6 +56,9 @@ else{
    
     <Route path='/' element={<Login/>}></Route>
     <Route path='/signup' element={<SignUp></SignUp>}></Route>
+    <Route path='/create-otp' element={<CreateOtp/>}></Route>
+    <Route path='/match-otp' element={<MatchOTP/>}></Route>
+    <Route path='/make-password' element={<MakePassword/>}></Route>
   </Routes>
   </>
 }
